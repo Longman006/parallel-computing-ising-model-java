@@ -1,5 +1,7 @@
 package tomek.szypula;
 
+import jdk.jshell.execution.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,43 @@ public class Board {
         }
     }
 
+    public void flipRandomSpin(double temperature,double field){
+        Spin spin = getRandomSpin();
+        double[] energy = new double [2];
+        for (int i = 0; i < 2; i++) {
+            energy[i] = spin.getEnergy(field);
+            spin.flipSpin();
+        }
+        double deltaEnergy = energy[1] - energy[0];
+        if (deltaEnergy < 0){
+            spin.flipSpin();
+        }
+        else {
+            double random = Utils.getRandomDouble();
+            if(Math.exp(-deltaEnergy/temperature) > random){
+                spin.flipSpin();
+            }
+
+        }
+
+    }
+
+    private Spin getRandomSpin(){
+        return board.get(Utils.randomInRange(0,board.size()-1)).get(Utils.randomInRange(0,board.get(0).size()-1));
+    }
+    public double getMeanMagnetization(){
+        double magnetization = 0 ;
+        int counter = 0;
+        for (List<Spin> spinList:
+        board){
+            for (Spin spin :
+                    spinList) {
+                magnetization += spin.getValue();
+                counter++;
+            }
+        }
+        return magnetization/counter;
+    }
     @Override
     public String toString() {
         String string = "";

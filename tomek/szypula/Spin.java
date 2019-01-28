@@ -33,8 +33,25 @@ public class Spin {
         return value;
     }
 
+    public double getEnergy(double field){
+        int energy = 0 ;
+        for (Spin spin :
+                getNeighbours()) {
+            energy -= getValue() * spin.getValue();
+        }
+        return energy - getValue()*field;
+    }
+
     public List<Spin> getNeighbours() {
         return neighbours;
+    }
+    public void flipSpin(){
+        if (getValue() == 1){
+            setValue(-1);
+        }
+        else {
+            setValue(1);
+        }
     }
 
     @Override
